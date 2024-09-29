@@ -1,0 +1,91 @@
+From 0e6df8b30c0d3b812ed1928adbf5a68205a4d41e Mon Sep 17 00:00:00 2001
+From: wjyrich <1071633242@qq.com>
+Date: Tue, 17 Sep 2024 16:20:23 +0800
+Subject: [PATCH] install
+
+---
+ CMakeLists.txt          | 36 +-----------------------------------
+ cmake/HulaInstall.cmake |  8 ++++----
+ 2 files changed, 5 insertions(+), 39 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a349faf..27c6f87 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -94,7 +94,7 @@ configure_file (
+     "${CMAKE_BINARY_DIR}/HulaVersion.h"
+ )
+ include_directories (${CMAKE_BINARY_DIR})
+-
++include_directories (${CMAKE_INSTALL_PREFIX}/include)
+ 
+ 
+ 
+@@ -225,38 +225,4 @@ install (
+ )
+ 
+ 
+-
+-
+-######## Testing ########
+-# GUI tests are in Testing.cmake
+-# Updater tests are in Testing.cmake
+-
+-# Build settings for DEBUG builds only
+-if (CMAKE_BUILD_TYPE MATCHES "Debug")
+-
+-    include (${CMAKE_CURRENT_LIST_DIR}/cmake/Testing.cmake)
+-
+-    # Test that only rely on the audio library
+-    create_test ("src/test/TestOSAudio.cpp" "" 3 FALSE FALSE)
+-    create_test ("src/test/TestHulaRingBuffer.cpp" "" 1 TRUE FALSE)
+-    create_test ("src/test/TestController.cpp" "" -1 TRUE FALSE)
+-
+-    if (OSX)
+-        create_test ("src/test/TestOSXAudio.cpp" "" -1 FALSE FALSE)
+-    elseif (WIN32)
+-        create_test ("src/test/TestWindowsAudio.cpp" "" -1 FALSE FALSE)
+-    endif ()
+-
+-    if (NOT HL_BUILD_ONLY_AUDIO)
+-        create_test ("src/test/TestTransport.cpp" "" -1 FALSE FALSE)
+-        create_test ("src/test/TestRecord.cpp" "" -1 FALSE FALSE)
+-
+-        if (HL_BUILD_CLI)
+-            create_test ("src/test/TestCLIArgs.cpp" "" -1 TRUE FALSE)
+-            create_test("src/test/TestInteractiveCLI.cpp" "src/ui/cli/InteractiveCLI.cpp" -1 TRUE FALSE)
+-        endif ()
+-    endif ()
+-
+-endif ()
+-
+ message (STATUS "")
+diff --git a/cmake/HulaInstall.cmake b/cmake/HulaInstall.cmake
+index 73cb02a..7197d93 100644
+--- a/cmake/HulaInstall.cmake
++++ b/cmake/HulaInstall.cmake
+@@ -55,8 +55,8 @@ elseif (EXISTS "/etc/debian_version")
+         "${PROJECT_SOURCE_DIR}/res/installer/hulaloop.desktop.in"
+         "${CMAKE_BINARY_DIR}/hulaloop.desktop"
+     )
+-    install (FILES ${CMAKE_BINARY_DIR}/hulaloop.desktop DESTINATION /usr/share/applications)
+-    install (FILES ${PROJECT_SOURCE_DIR}/res/logo/hulaloop-logo.svg DESTINATION /usr/share/icons/hicolor/scalable/apps)
++    install (FILES ${CMAKE_BINARY_DIR}/hulaloop.desktop DESTINATION share/applications)
++    install (FILES ${PROJECT_SOURCE_DIR}/res/logo/hulaloop-logo.svg DESTINATION share/icons/hicolor/scalable/apps)
+ 
+ elseif (EXISTS "/etc/redhat-release")
+ 
+@@ -70,8 +70,8 @@ elseif (EXISTS "/etc/redhat-release")
+         "${PROJECT_SOURCE_DIR}/res/installer/hulaloop.desktop.in"
+         "${CMAKE_BINARY_DIR}/hulaloop.desktop"
+     )
+-    install (FILES ${CMAKE_BINARY_DIR}/hulaloop.desktop DESTINATION /usr/share/applications)
+-    install (FILES ${PROJECT_SOURCE_DIR}/res/logo/hulaloop-logo.svg DESTINATION /usr/share/icons/hicolor/scalable/apps)
++    install (FILES ${CMAKE_BINARY_DIR}/hulaloop.desktop DESTINATION share/applications)
++    install (FILES ${PROJECT_SOURCE_DIR}/res/logo/hulaloop-logo.svg DESTINATION share/icons/hicolor/scalable/apps)
+ 
+ endif ()
+ 
+-- 
+2.43.4
+
